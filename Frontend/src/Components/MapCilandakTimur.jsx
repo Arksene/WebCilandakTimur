@@ -114,7 +114,6 @@ export default function MapCilandakTimur() {
               const rtLabel = rtFeature.properties?.WADMRT || `RT ${idx}`;
               const rwLabel = rtFeature.properties?.WADMRW || "?";
 
-              // Jika ada geometry, render sebagai GeoJSON
               if (rtFeature.geometry) {
                 return (
                   <GeoJSON
@@ -127,7 +126,6 @@ export default function MapCilandakTimur() {
                       dashArray: "5, 5",
                     }}
                     onEachFeature={(feature, layer) => {
-                      console.log("RT Feature JJJ:", feature);
                       const popupContent = `
                         <div style="font-family: Arial; font-size: 12px;">
                           <strong style="color: #0066cc; font-size: 14px;">📍 Informasi</strong>
@@ -142,7 +140,6 @@ export default function MapCilandakTimur() {
                 );
               }
 
-              // Fallback: render marker di centroid kelurahan jika tidak ada geometry
               return kelurahanCentroid ? (
                 <Marker
                   key={`rt-marker-${rtLabel}-${idx}`}
