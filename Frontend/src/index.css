@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  --color-CilandakGreen: #004001;
+  --color-hijauFigma: #0a210f;
+  --color-hijauNavbar: #0a210fb2;
 }
