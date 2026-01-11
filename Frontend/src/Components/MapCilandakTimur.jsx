@@ -28,7 +28,7 @@ export default function MapCilandakTimur() {
         doubleClickZoom={false}
         touchZoom={false}
         zoomControl={false}
-        className="w-full h-full rounded-lg"
+        className="w-full h-full"
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"

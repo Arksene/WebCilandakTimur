@@ -6,11 +6,13 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node src/index.js"
+    "dev": "node src/index.js",
+    "start": "node src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@gradio/client": "^2.0.2",
     "@prisma/client": "6.19",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.8.0",

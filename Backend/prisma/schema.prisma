@@ -48,48 +48,50 @@ model DokumenPublik {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   namaDokumen String
   fileUrl     String
-  deskripsi   String?
   kategori    String?
   createdAt   DateTime @default(now())
 }
 
 // 5. Tabel untuk Layanan Publik
 model LayananPublik {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  namaLayanan String
-  syarat      String
-  kategoriLayanan    String
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  nomor           Int?     
+  namaLayanan     String
+  kategoriLayanan String
+  syarat          String[] 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
-// 6. Tabel untuk Data Wilayah
-// 1. Model untuk Tabel "Batas Wilayah" (3 Kolom Teks)
 model BatasWilayah {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  arah      String // Utara, Timur, Selatan, Barat
-  batas     String // Contoh: "Jl. Kemang Selatan..."
-  kelurahan String // Contoh: "Kelurahan Bangka"
+  arah      String 
+  batas     String 
+  kelurahan String 
+  Kecamatan String?
   updatedAt DateTime @updatedAt
 }
 
-// 2. Model untuk Tabel "Demografi" (Jumlah Penduduk & Wilayah Administrasi)
+
 model Statistik {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
-  label     String // Contoh: "Laki-laki", "Perempuan", "RT", "RW"
-  jumlah    Int    // Contoh: 15108, 70
-  kategori  KategoriStatistik // Membedakan tabel kiri (Penduduk) atau kanan (Admin)
+  label     String 
+  value    String?
+  kategori  KategoriStatistik 
   
   updatedAt DateTime @updatedAt
 }
 
 enum KategoriStatistik {
-  PENDUDUK    // Untuk data Laki-laki / Perempuan
-  WILAYAH     // Untuk data RT / RW
+  PENDUDUK    
+  WILAYAH     
 }
 
 // 7. Tabel untuk Pengaduan
 model Pengaduan {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   namaPengadu  String
+  judulPengaduan String
   email        String?
   isiPengaduan String
   buktiFotoUrl   String

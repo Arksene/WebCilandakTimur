@@ -9,7 +9,6 @@ export const uploadFileToCloudinary = async (file) => {
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "dokumen_publik",
-        resource_type: "auto",
       },
       (error, result) => {
         if (error) {
@@ -35,9 +34,8 @@ export const createDokumenPublik = async (req, res) => {
         success: false,
         message: "Nama dokumen harus diisi",
       });
-    }
+    } // Jika ada file, upload ke Cloudinary
 
-    // Jika ada file, upload ke Cloudinary
     if (req.file) {
       const uploadResult = await uploadFileToCloudinary(req.file);
       fileUrl = uploadResult.secure_url;
@@ -168,7 +166,6 @@ export const updateDokumenPublik = async (req, res) => {
 
     let fileUrl = existingDokumen.fileUrl;
 
-    // Jika ada file baru, upload dan hapus yang lama
     if (req.file) {
       if (existingDokumen.fileUrl) {
         const publicId = existingDokumen.fileUrl.split("/").pop().split(".")[0];
@@ -218,9 +215,8 @@ export const deleteDokumenPublik = async (req, res) => {
         success: false,
         message: "Dokumen publik tidak ditemukan",
       });
-    }
+    } // Hapus file dari Cloudinary jika ada
 
-    // Hapus file dari Cloudinary jika ada
     if (dokumen.fileUrl) {
       const publicId = dokumen.fileUrl.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(`dokumen_publik/${publicId}`);

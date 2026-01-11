@@ -26,13 +26,13 @@ export const uploadToCloudinary = async (file) => {
 // Buat pengaduan baru
 export const createPengaduan = async (req, res) => {
   try {
-    const { namaPengadu, email, isiPengaduan } = req.body;
+    const { namaPengadu, email, isiPengaduan, judulPengaduan } = req.body;
     let buktiFotoUrl = null;
 
-    if (!namaPengadu || !isiPengaduan) {
+    if (!namaPengadu || !isiPengaduan || !judulPengaduan) {
       return res.status(400).json({
         success: false,
-        message: "Nama pengadu dan isi pengaduan harus diisi",
+        message: "Nama pengadu, isi pengaduan, dan judul pengaduan harus diisi",
       });
     }
 
@@ -53,6 +53,7 @@ export const createPengaduan = async (req, res) => {
         namaPengadu,
         email,
         isiPengaduan,
+        judulPengaduan,
         buktiFotoUrl,
         status: "PENDING",
       },
@@ -169,7 +170,7 @@ export const updateStatusPengaduan = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    const validStatus = ["PENDING", "PROSES", "SELESAI"];
+    const validStatus = ["PENDING", "PROSES", "SELESAI", "DITOLAK"];
     if (!status || !validStatus.includes(status.toUpperCase())) {
       return res.status(400).json({
         success: false,

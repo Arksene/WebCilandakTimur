@@ -27,10 +27,9 @@ export const uploadToCloudinary = async (file) => {
 // Buat berita baru dengan gambar
 export const createBerita = async (req, res) => {
   try {
-    const { judul, isi, kategori, tanggal } = req.body;
+    const { judul, isi, kategori, tanggal, penulis } = req.body;
     let gambarUrl = null;
 
-    // Jika ada file, upload ke Cloudinary
     if (req.file) {
       const uploadResult = await uploadToCloudinary(req.file);
       gambarUrl = uploadResult.secure_url;
@@ -41,6 +40,7 @@ export const createBerita = async (req, res) => {
         judul,
         isi,
         gambar: gambarUrl,
+        penulis: penulis || "Kelurahan Cilandak Timur",
         tanggal: tanggal ? new Date(tanggal) : undefined,
         kategori: kategori,
       },
@@ -80,6 +80,35 @@ export const getAllBerita = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Gagal mengambil data berita",
+      error: error.message,
+    });
+  }
+};
+
+export const getLatestBerita = async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 3;
+
+    const berita = await prisma.berita.findMany({
+      take: limit,
+      orderBy: {
+        tanggal: "desc",
+      },
+      where: {
+        kategori: "BERITA",
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `${limit} Berita terbaru berhasil diambil`,
+      data: berita,
+    });
+  } catch (error) {
+    console.error("Error fetching latest berita:", error);
+    res.status(500).json({
+      success: false,
+      message: "Gagal mengambil berita terbaru",
       error: error.message,
     });
   }

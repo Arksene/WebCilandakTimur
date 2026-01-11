@@ -17,13 +17,13 @@ const router = express.Router();
 router.post("/", upload.single("buktiFoto"), createPengaduan);
 
 //  Ambil semua pengaduan
-router.get("/", authMiddleware, getAllPengaduan);
+router.get("/", getAllPengaduan);
 
 //  Ambil pengaduan berdasarkan ID
-router.get("/id/:id", authMiddleware, getPengaduanById);
+router.get("/id/:id", getPengaduanById);
 
 //  Ambil pengaduan berdasarkan status
-router.get("/status/:status", authMiddleware, getPengaduanByStatus);
+router.get("/status/:status", getPengaduanByStatus);
 
 //  Update status pengaduan
 router.patch("/:id/status", authMiddleware, updateStatusPengaduan);

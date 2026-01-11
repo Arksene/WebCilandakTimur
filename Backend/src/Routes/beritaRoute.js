@@ -6,6 +6,7 @@ import {
   getBeritaById,
   updateBerita,
   deleteBerita,
+  getLatestBerita,
 } from "../Controllers/BeritaController.js";
 import authMiddleware from "../Middlewares/authMiddleware.js";
 
@@ -16,6 +17,9 @@ router.post("/upload", authMiddleware, upload.single("gambar"), createBerita);
 
 // Ambil semua berita
 router.get("/", getAllBerita);
+
+// Ambil beberapa berita terbaru
+router.get("/latest", getLatestBerita);
 
 // Ambil berita berdasarkan ID
 router.get("/:id", getBeritaById);

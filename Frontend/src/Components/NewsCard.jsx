@@ -4,10 +4,8 @@ import { Calendar, User, ArrowRight } from "lucide-react";
 const NewsCard = ({ title, image, date, author, id }) => {
   return (
     <div className="bg-white border-2 border-[#4ade80] p-1 rounded-md shadow-sm h-full flex flex-col hover:shadow-md transition-shadow duration-300">
-      {/* Inner Border/Decoration Container */}
       <div className="border border-gray-100 h-full flex flex-col rounded-sm">
-        {/* Bagian Gambar */}
-        <div className="relative h-48 w-full overflow-hidden group">
+        <div className="relative h-auto w-full overflow-hidden group">
           <img
             src={image}
             alt={title}
@@ -36,7 +34,7 @@ const NewsCard = ({ title, image, date, author, id }) => {
           <div className="flex items-center justify-between text-[10px] text-gray-500 border-t pt-2 mt-auto">
             <div className="flex items-center gap-1">
               <User size={12} />
-              <span className="truncate max-w-[80px]">{author}</span>
+              <span className="truncate max-w-[20   0px]">{author}</span>
             </div>
             <div className="flex items-center gap-1">
               <Calendar size={12} />

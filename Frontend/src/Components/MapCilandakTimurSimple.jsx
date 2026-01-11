@@ -20,16 +20,7 @@ export default function MapCilandakTimurSimple() {
 
   return (
     <>
-      <MapContainer
-        center={defaultCenter}
-        zoom={13}
-        dragging={false}
-        scrollWheelZoom={false}
-        doubleClickZoom={false}
-        touchZoom={false}
-        zoomControl={false}
-        className="w-full h-full rounded-lg"
-      >
+      <MapContainer center={defaultCenter} zoom={13} className="w-full h-full">
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"

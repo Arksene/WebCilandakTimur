@@ -12,13 +12,16 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
     "axios": "^1.13.2",
+    "framer-motion": "^12.25.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.562.0",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",
     "react-leaflet": "^5.0.0-rc.2",
+    "react-markdown": "^10.1.0",
     "react-router": "^7.12.0",
     "react-router-dom": "^7.12.0",
+    "sweetalert2": "^11.26.17",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
