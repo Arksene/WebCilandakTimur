@@ -15,8 +15,9 @@ const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
-app.use(cors());
-
+app.use(cors({
+  origin: "https://web-cilandak-timur.vercel.app"
+}));
 app.use("/api/auth", authRoute);
 app.use("/api/berita", beritaRoute);
 app.use("/api/dokumen-publik", dokumenPublikRoute);
