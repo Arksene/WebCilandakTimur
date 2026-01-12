@@ -10,6 +10,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { confirmAlert } from "../lib/alerts";
 
 const Sidebar = ({ activeMenu, setActiveMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,19 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
     { name: "Layanan Publik", icon: Briefcase, key: "layanan" },
     { name: "Pengaduan Warga", icon: MessageSquare, key: "pengaduan" },
   ];
+
+  const handleLogout = async () => {
+    const isConfirmed = await confirmAlert(
+      "Konfirmasi Keluar",
+      "Apakah Anda yakin ingin mengakhiri sesi admin ini?"
+    );
+
+    if (isConfirmed) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+  };
 
   const SidebarContent = () => (
     <>
@@ -64,7 +78,7 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
       <div className="p-4 border-t border-slate-800/50">
         <button
           className="w-full flex items-center gap-3 p-3.5 text-rose-400 hover:bg-rose-500/10 rounded-2xl transition-all font-bold text-sm group"
-          onClick={() => alert("Logout Clicked")}
+          onClick={handleLogout}
         >
           <LogOut
             size={20}
