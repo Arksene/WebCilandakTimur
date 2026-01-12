@@ -40,7 +40,7 @@ export const createBerita = async (req, res) => {
         judul,
         isi,
         gambar: gambarUrl,
-        penulis: penulis || "Kelurahan Cilandak Timur",
+        Penulis: penulis || "Kelurahan Cilandak Timur",
         tanggal: tanggal ? new Date(tanggal) : undefined,
         kategori: kategori,
       },
