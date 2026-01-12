@@ -18,9 +18,11 @@ const LoginPage = () => {
     setIsLoading(true);
     setError("");
 
+    
+    const Base_URL = import.meta.env.VITE_API_URL;
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        `${Base_URL}/api/auth/login`,
         formData
       );
 
