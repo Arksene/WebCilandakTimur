@@ -66,12 +66,11 @@ const DashboardBerita = () => {
   };
 
   const handleFormSubmit = async (formDataInput) => {
-    // 1. Validasi dilakukan menggunakan 'formDataInput' (parameter fungsi)
     if (formDataInput.kategori === "BERITA" && !formDataInput.gambar) {
       alertError(
         "Untuk kategori Berita, Anda wajib mengunggah gambar bukti/sampul!"
       );
-      return; // Berhenti di sini jika validasi gagal
+      return;
     }
 
     // 2. Deklarasi FormData setelah validasi lolos
@@ -96,7 +95,6 @@ const DashboardBerita = () => {
       if (editingItem) {
         await axios.put(`${API_URL}/${editingItem.id}`, formData, config);
       } else {
-        // Pastikan rute backend Anda benar, biasanya POST ke API_URL utama atau /upload
         await axios.post(`${API_URL}/upload`, formData, config);
       }
 

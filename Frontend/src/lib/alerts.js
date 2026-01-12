@@ -1,16 +1,19 @@
 import Swal from "sweetalert2";
 
-export const confirmAlert = async (message) => {
-  return Swal.fire({
+export const confirmAlert = async (message, text = "") => {
+  const result = await Swal.fire({
     icon: "question",
     title: "Konfirmasi",
-    text: message,
-    showDenyButton: true,
+    text: message || text,
+    showCancelButton: true,
     confirmButtonText: "Ya",
-    denyButtonText: "Tidak",
+    cancelButtonText: "Tidak",
+    confirmButtonColor: "#0f172a",
+    cancelButtonColor: "#be123c",
   });
-};
 
+  return result.isConfirmed;
+};
 export const alertSuccess = async (message) => {
   return Swal.fire({
     icon: "success",

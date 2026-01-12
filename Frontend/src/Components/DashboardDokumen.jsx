@@ -43,19 +43,22 @@ const DashboardDokumen = () => {
   useEffect(() => {
     fetchDokumen();
   }, []);
+
   const handleDelete = async (id) => {
     const isConfirmed = await confirmAlert(
-      "Apakah Anda yakin?",
-      "Berita yang dihapus tidak dapat dikembalikan!"
+      "Hapus Dokumen?",
+      "Berkas dokumen yang dihapus tidak dapat dipulihkan kembali!"
     );
 
     if (isConfirmed) {
       try {
         await axios.delete(`${API_URL}/${id}`, getAuthHeader());
-        fetchBerita();
-        alertSuccess("Berita Berhasil Dihapus");
+
+        fetchDokumen();
+
+        alertSuccess("Dokumen Berhasil Dihapus");
       } catch (error) {
-        alertError("Gagal menghapus berita.");
+        alertError("Gagal menghapus dokumen.");
       }
     }
   };
