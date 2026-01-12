@@ -8,8 +8,8 @@ export async function sendEmail(to, subject, text) {
       port: 465,
       secure: true,
       auth: {
-        user: config.support_email,
-        pass: config.support_email_password,
+        user: process.env.EMAIL_SENDER,
+        pass: process.env.EMAIL_PASSWORD,
       },
       tls: {
         rejectUnauthorized: false,
