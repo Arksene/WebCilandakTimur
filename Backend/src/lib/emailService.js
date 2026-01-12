@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendEmail(to, subject, text) {
   try {
     const result = await resend.emails.send({
-      from: "Pengaduan <onboarding@resend.dev>", // bisa diganti domain sendiri
+      from: process.env.EMAIL_FROM,
       to: [to],
       subject,
       text,
