@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import NewsCard from "../Components/NewsCard";
 import PrestasiKerja from "../Components/PrestasiKerja";
+import Chatbot from "../Components/Chatbot";
 
 const formatTanggal = (isoString) => {
   const date = new Date(isoString);
@@ -77,7 +78,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {berita.map((berita, idx) => (
+            {berita?.map((berita, idx) => (
               <div key={idx} className="h-full">
                 <NewsCard
                   id={berita.id}
@@ -92,6 +93,7 @@ export default function HomePage() {
         </div>
       </section>
       <PrestasiKerja />
+      <Chatbot />
       <Footer />
     </div>
   );

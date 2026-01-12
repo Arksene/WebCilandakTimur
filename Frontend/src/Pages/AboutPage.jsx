@@ -159,7 +159,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <Chatbot />
       <section className="mt-10">
         <div className="flex flex-col items-center mb-10">
           <h1 className="font-bold text-3xl pb-1.5 border-b-3 border-hijauFigma text-center px-4">
@@ -355,6 +354,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      <Chatbot />
 
       <Footer />
     </>

@@ -7,17 +7,17 @@ import {
   BookOpen,
   Loader2,
   RefreshCcw,
+  Navigation,
+  School,
+  Info,
 } from "lucide-react";
 
 const DashboardInformasiKelurahan = ({ defaultTab = "profil" }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [loading, setLoading] = useState(true);
-
-  // --- STATE DATA ---
-  const [dataProfil, setDataProfil] = useState([]); // API: /informasi-kelurahan
-  const [dataBatas, setDataBatas] = useState([]); // API: /wilayah/batas
-  const [dataStatistik, setDataStatistik] = useState([]); // API: /wilayah/statistik
-  // --- CONFIG API ---
+  const [dataProfil, setDataProfil] = useState([]);
+  const [dataBatas, setDataBatas] = useState([]);
+  const [dataStatistik, setDataStatistik] = useState([]);
 
   const API_BASE = `${import.meta.env.VITE_API_URL}/api`;
 
@@ -26,23 +26,19 @@ const DashboardInformasiKelurahan = ({ defaultTab = "profil" }) => {
     return { headers: { Authorization: `Bearer ${token}` } };
   };
 
-  // --- 1. FETCH ALL DATA ---
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      // Kita panggil 3 endpoint sekaligus dengan Promise.all agar efisien
       const [resProfil, resBatas, resStat] = await Promise.all([
         axios.get(`${API_BASE}/informasi-kelurahan`),
         axios.get(`${API_BASE}/wilayah/batas`),
         axios.get(`${API_BASE}/wilayah/statistik`),
       ]);
-
       setDataProfil(resProfil.data.data);
       setDataBatas(resBatas.data.data);
       setDataStatistik(resStat.data.data);
     } catch (error) {
-      console.error("Gagal memuat data:", error);
-      alert("Gagal memuat data informasi kelurahan.");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -57,9 +53,8 @@ const DashboardInformasiKelurahan = ({ defaultTab = "profil" }) => {
     try {
       await axios.put(url + `/${id}`, payload, getAuthHeader());
       alert(message || "Data berhasil diperbarui!");
-      fetchAllData(); // Refresh data agar sinkron
+      fetchAllData();
     } catch (error) {
-      console.error("Update Error:", error);
       alert("Gagal menyimpan perubahan.");
     }
   };
@@ -85,244 +80,318 @@ const DashboardInformasiKelurahan = ({ defaultTab = "profil" }) => {
     handleUpdateItem(
       `${API_BASE}/informasi-kelurahan`,
       item.id,
-      {
-        key: item.key,
-        value: item.value,
-      },
+      { key: item.key, value: item.value },
       `Berhasil update ${item.key}`
     );
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="animate-spin mr-2" /> Memuat Data...
+      <div className="flex flex-col justify-center items-center h-[60vh] text-slate-500">
+        <Loader2 className="animate-spin mb-4 text-blue-600" size={40} />
+        <p className="font-medium animate-pulse">Menyingkronkan data...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Pusat Informasi Kelurahan
-        </h1>
-        <button
-          onClick={fetchAllData}
-          className="p-2 bg-white rounded border hover:bg-gray-100"
-          title="Refresh Data"
-        >
-          <RefreshCcw size={18} />
-        </button>
-      </div>
+    <div className="p-2 sm:p-4 md:p-8 bg-slate-50 min-h-screen">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight text-center md:text-left w-full">
+              Pusat Data Kelurahan
+            </h1>
+            <p className="text-slate-500 text-xs md:text-sm mt-1 text-center md:text-left w-full">
+              Kelola profil, demografi, dan informasi kewilayahan.
+            </p>
+          </div>
+          <button
+            onClick={fetchAllData}
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl shadow-sm hover:bg-slate-50 text-slate-600 transition-all active:scale-95 w-full md:w-auto"
+          >
+            <RefreshCcw size={16} />
+            <span className="text-sm font-semibold">Segarkan</span>
+          </button>
+        </div>
 
-      <div className="flex space-x-2 mb-6 border-b">
-        <button
-          onClick={() => setActiveTab("profil")}
-          className={`px-4 py-2 flex gap-2 ${
-            activeTab === "profil"
-              ? "border-b-2 border-blue-600 text-blue-600 font-bold"
-              : "text-gray-500"
-          }`}
-        >
-          <BookOpen size={18} /> Profil & Data
-        </button>
-        <button
-          onClick={() => setActiveTab("batas")}
-          className={`px-4 py-2 flex gap-2 ${
-            activeTab === "batas"
-              ? "border-b-2 border-blue-600 text-blue-600 font-bold"
-              : "text-gray-500"
-          }`}
-        >
-          <MapPin size={18} /> Batas Wilayah
-        </button>
-        <button
-          onClick={() => setActiveTab("statistik")}
-          className={`px-4 py-2 flex gap-2 ${
-            activeTab === "statistik"
-              ? "border-b-2 border-blue-600 text-blue-600 font-bold"
-              : "text-gray-500"
-          }`}
-        >
-          <BarChart2 size={18} /> Statistik
-        </button>
-      </div>
+        <div className="flex bg-slate-200/50 p-1 rounded-2xl mb-6 md:mb-8 overflow-x-auto scrollbar-hide no-scrollbar">
+          {[
+            { id: "profil", label: "Profil", icon: BookOpen },
+            { id: "batas", label: "Batas", icon: Navigation },
+            { id: "statistik", label: "Statistik", icon: BarChart2 },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex flex-1 items-center justify-center gap-2 px-3 md:px-6 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all whitespace-nowrap ${
+                activeTab === tab.id
+                  ? "bg-white text-blue-600 shadow-sm ring-1 ring-slate-200"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              <tab.icon size={16} className="md:w-[18px] md:h-[18px]" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-      {activeTab === "profil" && (
-        <div className="space-y-6 animate-fade-in">
-          <div className="bg-white p-6 rounded shadow">
-            <h3 className="font-bold text-lg mb-4 text-gray-800 border-b pb-2">
-              Profil Umum
-            </h3>
-            <div className="space-y-4">
-              {["Sejarah", "Visi", "Misi"].map((key) => {
-                const item = getProfilItem(key);
-                if (!item) return null; // Skip jika key tidak ada di DB
-                return (
-                  <div key={item.id}>
-                    <label className="block font-semibold mb-1 text-sm text-gray-600">
-                      {item.key}
-                    </label>
-                    <div className="flex gap-2">
+        {activeTab === "profil" && (
+          <div className="grid grid-cols-1 gap-6 md:gap-8">
+            <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 p-4 md:p-8">
+              <div className="flex items-center gap-3 mb-6 md:mb-8">
+                <div className="p-2 bg-blue-50 rounded-lg text-blue-600">
+                  <Info size={20} />
+                </div>
+                <h3 className="font-bold text-lg md:text-xl text-slate-800">
+                  Narasi Profil Umum
+                </h3>
+              </div>
+
+              <div className="space-y-6 md:space-y-8">
+                {["Sejarah", "Visi", "Misi"].map((key) => {
+                  const item = getProfilItem(key);
+                  if (!item) return null;
+                  return (
+                    <div key={item.id} className="group">
+                      <div className="flex items-center justify-between mb-3 px-1">
+                        <label className="block font-bold text-[10px] md:text-xs uppercase tracking-widest text-slate-400">
+                          {item.key}
+                        </label>
+                        <button
+                          onClick={() => saveProfilByKey(key)}
+                          className="flex items-center gap-1.5 bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[10px] md:text-xs font-bold hover:bg-blue-700 shadow-md transition-all active:scale-95"
+                        >
+                          <Save size={14} />
+                          Simpan
+                        </button>
+                      </div>
                       <textarea
-                        className="w-full border p-2 rounded h-24 focus:ring-2 focus:ring-blue-500 outline-none"
+                        className="w-full border border-slate-200 p-3 md:p-4 rounded-xl md:rounded-2xl h-32 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all bg-slate-50/50 focus:bg-white text-slate-700 text-sm md:text-base shadow-inner resize-none"
                         value={item.value}
                         onChange={(e) =>
                           handleProfilChange(key, e.target.value)
                         }
                       />
-                      <button
-                        onClick={() => saveProfilByKey(key)}
-                        className="self-end bg-blue-600 text-white p-2 rounded hover:bg-blue-700 h-10 flex items-center"
-                      >
-                        <Save size={16} />
-                      </button>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div className="bg-white p-6 rounded shadow">
-            <h3 className="font-bold text-lg mb-4 text-gray-800 border-b pb-2">
-              Data Fasilitas Pendidikan
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {["paud", "sd", "smp", "sma", "smk", "pkbm"].map((key) => {
-                const item = getProfilItem(key);
-                if (!item) return null;
-                return (
-                  <div key={item.id} className="bg-gray-50 p-3 rounded border">
-                    <label className="block font-bold text-xs uppercase text-gray-500 mb-1">
-                      {item.key}
-                    </label>
-                    <div className="flex gap-1">
+            <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 p-4 md:p-8">
+              <div className="flex items-center gap-3 mb-6 md:mb-8">
+                <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600">
+                  <School size={20} />
+                </div>
+                <h3 className="font-bold text-lg md:text-xl text-slate-800">
+                  Fasilitas Pendidikan
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {["paud", "sd", "smp", "sma", "smk", "pkbm"].map((key) => {
+                  const item = getProfilItem(key);
+                  if (!item) return null;
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-100 group hover:border-emerald-200 hover:bg-white hover:shadow-lg transition-all"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <label className="block font-black text-[10px] uppercase text-slate-400 tracking-tighter">
+                          Kuantitas {item.key}
+                        </label>
+                        <button
+                          onClick={() => saveProfilByKey(key)}
+                          className="text-emerald-600 hover:bg-emerald-50 p-1.5 rounded-lg transition-colors"
+                        >
+                          <Save size={18} />
+                        </button>
+                      </div>
                       <input
                         type="text"
-                        className="w-full border p-1 rounded font-bold text-gray-800"
+                        className="w-full bg-transparent border-b-2 border-slate-200 py-1 font-bold text-slate-800 focus:border-emerald-500 outline-none transition-all text-base md:text-lg"
                         value={item.value}
                         onChange={(e) =>
                           handleProfilChange(key, e.target.value)
                         }
                       />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "batas" && (
+          <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 p-4 md:p-8">
+            <h3 className="font-bold text-lg md:text-xl text-slate-800 mb-6 md:mb-8 flex items-center gap-2">
+              <Navigation className="text-blue-500" size={24} />
+              Geografis Batas Wilayah
+            </h3>
+            <div className="space-y-4 md:space-y-6">
+              {dataBatas.map((item, index) => (
+                <div
+                  key={item.id}
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 items-center p-4 md:p-6 rounded-2xl border border-slate-100 bg-slate-50/30 group hover:bg-white hover:shadow-md transition-all"
+                >
+                  <div className="lg:col-span-2">
+                    <span className="block text-[10px] font-black uppercase text-slate-400 mb-1">
+                      Arah
+                    </span>
+                    <div className="font-black text-blue-700 bg-blue-50 px-4 py-2 rounded-xl text-center border border-blue-100 text-sm">
+                      {item.arah}
+                    </div>
+                  </div>
+                  <div className="lg:col-span-4">
+                    <label className="text-[10px] font-black uppercase text-slate-400 block mb-1">
+                      Jalan / Landmark
+                    </label>
+                    <input
+                      className="w-full bg-white border border-slate-200 p-2 md:p-2.5 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-medium text-slate-700 text-sm"
+                      value={item.batas}
+                      onChange={(e) => {
+                        const newData = [...dataBatas];
+                        newData[index].batas = e.target.value;
+                        setDataBatas(newData);
+                      }}
+                    />
+                  </div>
+                  <div className="lg:col-span-3">
+                    <label className="text-[10px] font-black uppercase text-slate-400 block mb-1">
+                      Kelurahan
+                    </label>
+                    <input
+                      className="w-full bg-white border border-slate-200 p-2 md:p-2.5 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-medium text-slate-700 text-sm"
+                      value={item.kelurahan}
+                      onChange={(e) => {
+                        const newData = [...dataBatas];
+                        newData[index].kelurahan = e.target.value;
+                        setDataBatas(newData);
+                      }}
+                    />
+                  </div>
+                  <div className="lg:col-span-2">
+                    <label className="text-[10px] font-black uppercase text-slate-400 block mb-1">
+                      Kecamatan
+                    </label>
+                    <input
+                      className="w-full bg-white border border-slate-200 p-2 md:p-2.5 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-medium text-slate-700 text-sm"
+                      value={item.Kecamatan || ""}
+                      onChange={(e) => {
+                        const newData = [...dataBatas];
+                        newData[index].Kecamatan = e.target.value;
+                        setDataBatas(newData);
+                      }}
+                    />
+                  </div>
+                  <div className="lg:col-span-1">
+                    <button
+                      onClick={() =>
+                        handleUpdateItem(
+                          `${API_BASE}/wilayah/batas`,
+                          item.id,
+                          item,
+                          `Batas ${item.arah} diperbarui`
+                        )
+                      }
+                      className="w-full h-11 lg:aspect-square bg-slate-900 text-white rounded-xl flex items-center justify-center hover:bg-blue-600 transition-all shadow-lg active:scale-95"
+                    >
+                      <Save size={20} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === "statistik" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 p-4 md:p-8 h-fit">
+              <h3 className="font-bold text-lg md:text-xl text-slate-800 mb-6 md:mb-8 flex items-center gap-3">
+                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                  <BarChart2 size={20} />
+                </div>
+                Demografi Penduduk
+              </h3>
+              <div className="space-y-4 md:space-y-6">
+                {dataStatistik.penduduk.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 md:p-4 rounded-2xl bg-slate-50 border border-slate-100"
+                  >
+                    <div className="font-bold text-slate-600 text-xs md:text-sm tracking-tight">
+                      {item.label}
+                    </div>
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                      <input
+                        className="flex-1 sm:w-28 md:w-32 bg-white border border-slate-200 p-2 rounded-xl text-right font-mono font-bold text-blue-600 focus:ring-2 focus:ring-blue-100 outline-none shadow-sm text-sm"
+                        value={item.value}
+                        onChange={(e) => {
+                          const realIndex = dataStatistik.findIndex(
+                            (x) => x.id === item.id
+                          );
+                          const newData = [...dataStatistik];
+                          newData[realIndex].value = e.target.value;
+                          setDataStatistik(newData);
+                        }}
+                      />
                       <button
-                        onClick={() => saveProfilByKey(key)}
-                        className="bg-green-600 text-white p-1 rounded hover:bg-green-700"
+                        onClick={() =>
+                          handleUpdateItem(
+                            `${API_BASE}/wilayah/statistik`,
+                            item.id,
+                            item,
+                            "Data kependudukan disimpan"
+                          )
+                        }
+                        className="bg-indigo-600 text-white p-2 rounded-xl hover:bg-indigo-700 shadow-md transition-all"
                       >
-                        <Save size={14} />
+                        <Save size={18} />
                       </button>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === "batas" && (
-        <div className="bg-white p-6 rounded shadow animate-fade-in">
-          <h3 className="font-bold text-lg mb-4 text-gray-800">
-            Batas Wilayah
-          </h3>
-          <div className="grid gap-4">
-            {dataBatas.map((item, index) => (
-              <div
-                key={item.id}
-                className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end border-b pb-4 last:border-0"
-              >
-                <div className="md:col-span-1">
-                  <label className="text-xs font-bold text-gray-500">
-                    Arah
-                  </label>
-                  <div className="font-bold text-gray-800 py-2 bg-gray-100 text-center rounded">
-                    {item.arah}
-                  </div>
-                </div>
-                <div className="md:col-span-5">
-                  <label className="text-xs font-bold text-gray-500">
-                    Batas Jalan/Wilayah
-                  </label>
-                  <input
-                    className="w-full border p-2 rounded"
-                    value={item.batas}
-                    onChange={(e) => {
-                      const newData = [...dataBatas];
-                      newData[index].batas = e.target.value;
-                      setDataBatas(newData);
-                    }}
-                  />
-                </div>
-                <div className="md:col-span-3">
-                  <label className="text-xs font-bold text-gray-500">
-                    Berbatasan dgn Kelurahan
-                  </label>
-                  <input
-                    className="w-full border p-2 rounded"
-                    value={item.kelurahan}
-                    onChange={(e) => {
-                      const newData = [...dataBatas];
-                      newData[index].kelurahan = e.target.value;
-                      setDataBatas(newData);
-                    }}
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="text-xs font-bold text-gray-500">
-                    Kecamatan
-                  </label>
-                  <input
-                    className="w-full border p-2 rounded"
-                    value={item.Kecamatan || ""}
-                    onChange={(e) => {
-                      const newData = [...dataBatas];
-                      newData[index].Kecamatan = e.target.value;
-                      setDataBatas(newData);
-                    }}
-                  />
-                </div>
-                <div className="md:col-span-1">
-                  <button
-                    onClick={() =>
-                      handleUpdateItem(
-                        `${API_BASE}/wilayah/batas`,
-                        item.id,
-                        item,
-                        `Update ${item.arah} berhasil`
-                      )
-                    }
-                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 flex justify-center"
-                  >
-                    <Save size={18} />
-                  </button>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
 
-      {activeTab === "statistik" && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
-          <div className="bg-white p-6 rounded shadow h-fit">
-            <h3 className="font-bold text-lg mb-4 text-blue-800 flex items-center gap-2">
-              <BarChart2 size={20} /> Statistik Penduduk
-            </h3>
-            <div className="space-y-4">
-              {dataStatistik.penduduk.map((item, index) => (
-                <div
-                  key={item.id}
-                  className="flex justify-between items-center border-b pb-2"
-                >
-                  <div className="w-1/3 font-medium text-gray-700">
-                    {item.label}
-                  </div>
-                  <div className="w-1/2 flex gap-2">
-                    <input
-                      className="w-full border p-1 rounded font-mono text-right"
+            <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 p-4 md:p-8 h-fit">
+              <h3 className="font-bold text-lg md:text-xl text-slate-800 mb-6 md:mb-8 flex items-center gap-3">
+                <div className="p-2 bg-amber-50 text-amber-600 rounded-lg">
+                  <MapPin size={20} />
+                </div>
+                Integrasi Wilayah (RT/RW)
+              </h3>
+              <div className="space-y-4 md:space-y-6">
+                {dataStatistik.wilayah.map((item) => (
+                  <div
+                    key={item.id}
+                    className="group p-4 md:p-5 rounded-2xl md:rounded-3xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all"
+                  >
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="font-black text-[10px] md:text-xs uppercase tracking-widest text-amber-600">
+                        {item.label}
+                      </span>
+                      <button
+                        onClick={() =>
+                          handleUpdateItem(
+                            `${API_BASE}/wilayah/statistik`,
+                            item.id,
+                            item,
+                            "Data wilayah disimpan"
+                          )
+                        }
+                        className="flex items-center gap-2 bg-amber-600 text-white px-3 md:px-4 py-1.5 rounded-xl text-[10px] md:text-xs font-bold hover:bg-amber-700 shadow-lg transition-all"
+                      >
+                        <Save size={14} /> Simpan
+                      </button>
+                    </div>
+                    <textarea
+                      className="w-full bg-white border border-slate-200 p-3 md:p-4 rounded-xl md:rounded-2xl text-xs md:text-sm font-medium text-slate-700 h-24 focus:ring-4 focus:ring-amber-50 outline-none transition-all resize-none shadow-inner"
                       value={item.value}
+                      placeholder="Contoh: 001, 002..."
                       onChange={(e) => {
                         const realIndex = dataStatistik.findIndex(
                           (x) => x.id === item.id
@@ -332,72 +401,13 @@ const DashboardInformasiKelurahan = ({ defaultTab = "profil" }) => {
                         setDataStatistik(newData);
                       }}
                     />
-                    <button
-                      onClick={() =>
-                        handleUpdateItem(
-                          `${API_BASE}/wilayah/statistik`,
-                          item.id,
-                          item,
-                          "Data disimpan"
-                        )
-                      }
-                      className="bg-indigo-600 text-white p-1 rounded hover:bg-indigo-700"
-                    >
-                      <Save size={16} />
-                    </button>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-
-          <div className="bg-white p-6 rounded shadow h-fit">
-            <h3 className="font-bold text-lg mb-4 text-green-800 flex items-center gap-2">
-              <MapPin size={20} /> Data RW
-            </h3>
-            <div className="space-y-4">
-              {dataStatistik.wilayah.map((item) => (
-                <div key={item.id} className="border p-3 rounded bg-gray-50">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-bold text-sm text-gray-700">
-                      {item.label}
-                    </span>
-                    <button
-                      onClick={() =>
-                        handleUpdateItem(
-                          `${API_BASE}/wilayah/statistik`,
-                          item.id,
-                          item,
-                          "Data RW disimpan"
-                        )
-                      }
-                      className="text-xs bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700 flex gap-1"
-                    >
-                      <Save size={12} /> Simpan
-                    </button>
-                  </div>
-                  <textarea
-                    className="w-full border p-2 rounded text-sm h-16"
-                    value={item.value}
-                    onChange={(e) => {
-                      const realIndex = dataStatistik.findIndex(
-                        (x) => x.id === item.id
-                      );
-                      const newData = [...dataStatistik];
-                      newData[realIndex].value = e.target.value;
-                      newData[realIndex].updatedAt = new Date();
-                      setDataStatistik(newData);
-                    }}
-                  />
-                  <p className="text-xs text-gray-400 mt-1">
-                    Format: 001, 002, 003...
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

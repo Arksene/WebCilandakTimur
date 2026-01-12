@@ -1,0 +1,12 @@
+# Mengabaikan node_modules di folder manapun
+**/node_modules/
+node_modules/
+
+# Mengabaikan file env di folder manapun
+**/.env
+.env
+.env.local
+
+# Tambahan (opsional)
+Frontend/dist/
+Backend/logs/

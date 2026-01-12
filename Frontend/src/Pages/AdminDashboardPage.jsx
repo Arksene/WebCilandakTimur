@@ -1,55 +1,39 @@
-// layouts/AdminLayout.jsx
 import { useState } from "react";
-import Sidebar from "../Components/Sidebar"; // Sesuaikan path Sidebar kamu
-
-// Import halaman-halaman dashboard yang sudah dibuat sebelumnya
+import Sidebar from "../Components/Sidebar";
 import DashboardInformasiKelurahan from "../Components/DashboardInformasiKelurahan";
 import DashboardBerita from "../Components/DashboardBerita";
 import DashboardPengaduan from "../Components/DashboardPengaduan";
 import DashboardLayanan from "../Components/DashboardLayanan";
 import DashboardDokumen from "../Components/DashboardDokumen";
-// import DashboardDokumen from '../pages/DashboardDokumen'; // Jika sudah ada
 
 const AdminLayout = () => {
-  // State untuk menyimpan menu apa yang sedang aktif
-  // Default kita set ke 'info' (Profil Kelurahan)
-  const [activeMenu, setActiveMenu] = useState("info");
+  const [activeMenu, setActiveMenu] = useState("berita");
 
-  // Fungsi untuk menentukan komponen mana yang dirender
   const renderContent = () => {
     switch (activeMenu) {
       case "berita":
         return <DashboardBerita />;
-
       case "layanan":
         return <DashboardLayanan />;
-
       case "pengaduan":
         return <DashboardPengaduan />;
-
       case "dokumen":
         return <DashboardDokumen />;
-
       case "info":
         return <DashboardInformasiKelurahan defaultTab="profil" />;
       case "wilayah":
         return <DashboardInformasiKelurahan defaultTab="wilayah" />;
       case "statistik":
         return <DashboardInformasiKelurahan defaultTab="statistik" />;
-
       default:
         return <DashboardInformasiKelurahan defaultTab="profil" />;
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar - Posisi Fixed di Kiri */}
+    <div className="flex min-h-screen bg-slate-50">
       <Sidebar activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
-
-      {/* Konten Utama - Di sebelah kanan Sidebar */}
-      {/* ml-64 digunakan karena sidebar lebarnya w-64 dan fixed */}
-      <main className="ml-64 w-full transition-all duration-300">
+      <main className="flex-1 ml-0 lg:ml-72 pt-20 lg:pt-0 transition-all duration-300 min-w-0">
         {renderContent()}
       </main>
     </div>

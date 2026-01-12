@@ -1,141 +1,74 @@
-import jakartaLogo from "../assets/jakarta.png";
-
+import { MapPin } from "lucide-react";
 export default function Footer() {
+  const iconStyle = "w-5 h-5 md:w-6 md:h-6";
+  const linkStyle =
+    "bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2.5 md:p-3 transition";
+
   return (
     <footer className="text-center">
-      <div className=" bg-hijauFigma opacity-99 text-white">
+      <div className="bg-hijauFigma opacity-99 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12 md:pt-10 md:pb-2">
-          {/* 2 Column Grid Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-8 md:mb-12 md:divide-x md:divide-white md:divide-opacity-30">
-            {/* Left Column: Logo + Title + Location */}
-            <div className="flex flex-col items-center md:items-start">
-              {/* Logo + Title */}
-              <div className="flex flex-col sm:flex-row sm:items-start mb-6">
+            <div className="flex flex-col items-center md:items-start text-left">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start mb-6">
                 <img
-                  src={jakartaLogo}
-                  alt="Jakarta Logo"
-                  className="w-16 h-16 md:w-20 md:h-20 mx-auto sm:mx-0 mb-4 sm:mb-0 sm:mr-4"
+                  src="/Coat_of_arms_of_Jakarta.svg"
+                  alt="Jakarta"
+                  className="w-16 h-16 md:w-20 md:h-20 mb-4 sm:mb-0 sm:mr-4"
                 />
-                <div className="flex flex-col items-center sm:items-start justify-center sm:justify-start">
-                  <p className="text-xl md:text-2xl font-semibold">Kelurahan</p>
+                <div>
+                  <p className="text-xl text-center md:text-left md:text-2xl font-semibold leading-tight">
+                    Kelurahan
+                  </p>
                   <p className="text-2xl md:text-3xl font-bold">
                     Cilandak Timur
                   </p>
                 </div>
               </div>
-
-              {/* Location */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 md:gap-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="white"
-                  className="w-6 h-6 md:w-7 md:h-7 flex-shrink-0"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                  />
-                </svg>
-                <p className="text-sm md:text-base text-center sm:text-left">
-                  Jl. Bhakti No.48 3, RT.3/RW.7, Cilandak Tim., Ps. Minggu,{" "}
-                  <br />
-                  Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12560
+              <div className="flex items-start gap-3">
+                <MapPin size={20} />
+                <p className="text-sm md:text-base">
+                  Jl. Bhakti No.48, RT.3/RW.7, Cilandak Timur, Ps. Minggu,
+                  Jakarta Selatan, 12560
                 </p>
               </div>
             </div>
 
-            {/* Right Column: Social Media */}
-            <div className="flex flex-col items-center justify-start">
-              <p className="text-sm md:text-base font-semibold mb-4">
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-sm md:text-base font-semibold mb-4 uppercase tracking-wider">
                 Ikuti Kami
               </p>
-              <div className="flex justify-center gap-3 md:gap-4 flex-wrap">
+              <div className="flex justify-center gap-4">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/share/1P6qogyRGf/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2.5 md:p-3 transition"
-                  title="Facebook"
+                  className="bg-white hover:bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center transition-all shadow-md"
                 >
-                  <svg
-                    className="w-5 h-5 md:w-6 md:h-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
                     <path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.408.593 24 1.324 24h11.494v-9.294H9.688v-3.621h3.13V8.41c0-3.099 1.894-4.785 4.659-4.785 1.325 0 2.464.099 2.796.143v3.24h-1.921c-1.5 0-1.793.715-1.793 1.763v2.309h3.587l-.467 3.621h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.324V1.324C24 .593 23.408 0 22.676 0" />
                   </svg>
                 </a>
 
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/kelurahancilandaktimur"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2.5 md:p-3 transition"
-                  title="Instagram"
+                  className="bg-white hover:bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center transition-all shadow-md"
                 >
-                  <svg
-                    className="w-5 h-5 md:w-6 md:h-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0m0 4c2.21 0 2.47.01 3.346.048.813.037 1.255.166 1.549.276.389.152.667.333.958.623.29.29.471.569.623.958.11.294.24.736.276 1.549.038.876.048 1.135.048 3.346 0 2.21-.01 2.47-.048 3.346-.037.813-.166 1.255-.276 1.549-.152.389-.333.667-.623.958-.29.29-.569.471-.958.623-.294.11-.736.24-1.549.276-.876.038-1.135.048-3.346.048-2.21 0-2.47-.01-3.346-.048-.813-.037-1.255-.166-1.549-.276-.389-.152-.667-.333-.958-.623-.29-.29-.471-.569-.623-.958-.11-.294-.24-.736-.276-1.549-.038-.876-.048-1.135-.048-3.346 0-2.21.01-2.47.048-3.346.037-.813.166-1.255.276-1.549.152-.389.333-.667.623-.958.29-.29.569-.471.958-.623.294-.11.736-.24 1.549-.276.876-.038 1.135-.048 3.346-.048m0-1.04C8.744 2.96 8.455 2.97 7.564 3.008c-.898.04-1.512.166-2.049.354-.555.215-1.025.504-1.49.969-.466.465-.754.936-.969 1.49-.188.537-.314 1.151-.354 2.049C2.97 8.455 2.96 8.744 2.96 12c0 3.256.01 3.545.048 4.436.04.898.166 1.512.354 2.049.215.555.504 1.025.969 1.49.465.466.936.754 1.49.969.537.188 1.151.314 2.049.354.891.038 1.18.048 4.436.048 3.256 0 3.545-.01 4.436-.048.898-.04 1.512-.166 2.049-.354.555-.215 1.025-.504 1.49-.969.466-.465.754-.936.969-1.49.188-.537.314-1.151.354-2.049.038-.891.048-1.18.048-4.436 0-3.256-.01-3.545-.048-4.436-.04-.898-.166-1.512-.354-2.049-.215-.555-.504-1.025-.969-1.49-.465-.466-.936-.754-1.49-.969-.537-.188-1.151-.314-2.049-.354-.891-.038-1.18-.048-4.436-.048" />
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                   </svg>
                 </a>
 
                 <a
-                  href="https://twitter.com"
+                  href="https://www.tiktok.com/@kelurahancilandaktimur"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2.5 md:p-3 transition"
-                  title="Twitter"
+                  className="bg-white hover:bg-gray-200 w-12 h-12 pl-1.5 rounded-full flex items-center justify-center transition-all shadow-md"
                 >
-                  <svg
-                    className="w-5 h-5 md:w-6 md:h-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417a9.868 9.868 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                  </svg>
-                </a>
-
-                <a
-                  href="https://wa.me"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2.5 md:p-3 transition"
-                  title="WhatsApp"
-                >
-                  <svg
-                    className="w-5 h-5 md:w-6 md:h-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.946 1.34c-2.95 1.706-4.898 5.202-4.898 8.866 0 1.529.307 3.01.903 4.418L3.467 20.92c-.396 1.065.267 2.249 1.443 2.45h.005c.965.173 1.858-.603 2.254-1.668l.687-1.853c1.07.541 2.277.835 3.554.835 4.934 0 8.945-4.011 8.945-8.945 0-2.408-.943-4.67-2.662-6.389-1.719-1.718-4-2.671-6.388-2.671z" />
-                  </svg>
-                </a>
-
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-2.5 md:p-3 transition"
-                  title="YouTube"
-                >
-                  <svg
-                    className="w-5 h-5 md:w-6 md:h-6"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+                    <path d="M12.525.02c1.31 0 2.591.214 3.75.606V5.32a5.093 5.093 0 01-3.047-1.03V15.5c0 3.59-2.91 6.5-6.5 6.5s-6.5-2.91-6.5-6.5 2.91-6.5 6.5-6.5c.348 0 .686.027 1.016.08v4.135a2.433 2.433 0 00-1.016-.215c-1.325 0-2.4 1.075-2.4 2.4s1.075 2.4 2.4 2.4 2.4-1.075 2.4-2.4V0h3.797z" />
                   </svg>
                 </a>
               </div>
@@ -143,12 +76,9 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="bg-hijauFigma p-4">
-        <p className="text-xs md:text-sm text-gray-200">
-          &copy; 2024 Kelurahan Cilandak Timur. All rights reserved.
-        </p>
-        <p className="text-xs md:text-sm text-gray-200 mt-2">
-          Dinas Administrasi Umum Pemerintah Provinsi DKI Jakarta
+      <div className="bg-hijauFigma p-4 border-t border-white border-opacity-10">
+        <p className="text-xs text-gray-200 opacity-70">
+          © 2026 Kelurahan Cilandak Timur. All rights reserved.
         </p>
       </div>
     </footer>

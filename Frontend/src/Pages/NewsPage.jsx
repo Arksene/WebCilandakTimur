@@ -11,6 +11,7 @@ import gambarHeader from "../assets/beritaGambar.jpg";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import NewsCard from "../Components/NewsCard";
+import Chatbot from "../Components/Chatbot";
 
 export default function NewsPage() {
   const [announcements, setAnnouncements] = useState([]);
@@ -331,6 +332,7 @@ export default function NewsPage() {
           </div>
         </div>
       </div>
+      <Chatbot />
       <Footer />
     </>
   );

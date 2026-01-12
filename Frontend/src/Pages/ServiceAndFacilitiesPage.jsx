@@ -8,6 +8,7 @@ import FasilitasPerpustakaan from "../Components/FasilitasPerpustakaan";
 import FasilitasPuskesmas from "../Components/FasilitasPuskesmas";
 import PasarSwalayan from "../Components/FasilitasBelanja";
 import headerLayanan from "../assets/headerlayanan.jpg";
+import Chatbot from "../Components/Chatbot";
 
 const LayananFasilitasPage = () => {
   const navigate = useNavigate();
@@ -117,6 +118,7 @@ const LayananFasilitasPage = () => {
           </section>
         </div>
       </div>
+      <Chatbot />
       <Footer />
     </>
   );

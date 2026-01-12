@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Calendar, User, Clock, MapPin, Upload } from "lucide-react";
+import { Calendar, User, Clock, Upload, Send } from "lucide-react";
 import Footer from "../Components/Footer";
 import Navbar from "../Components/Navbar";
 import { alertSuccess, alertError } from "../lib/alerts";
 import PolsekCilandak from "../assets/polsek.jpg";
+import Chatbot from "../Components/Chatbot";
 
 const LaporPage = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;
@@ -27,7 +28,6 @@ const LaporPage = () => {
     try {
       const response = await fetch(API_URL);
       const result = await response.json();
-      console.log(result);
       if (response.ok) {
         setReports(result.data || result);
       }
@@ -92,23 +92,26 @@ const LaporPage = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-white min-h-screen font-sans pb-20">
+      <div className="bg-white min-h-screen font-sans">
         <div
-          className="relative h-90 w-full bg-cover bg-center flex items-center justify-center"
+          className="relative h-64 md:h-90 w-full bg-cover bg-center flex items-center justify-center"
           style={{
             backgroundImage: `url(${PolsekCilandak})`,
             backgroundPosition: "center 60%",
           }}
         >
           <div className="absolute inset-0 bg-black/60"></div>
+          <div className="relative z-10 text-center px-4">
+            <h1 className="text-white text-3xl md:text-5xl font-black uppercase tracking-tighter">
+              Lapor!
+            </h1>
+            <h2 className="text-white text-xl md:text-3xl font-bold uppercase mt-2">
+              Pengaduan Online
+            </h2>
+          </div>
         </div>
-        <div className="text-center mt-6">
-          <h1 className="text-3xl font-bold uppercase">Lapor!</h1>
-          <h2 className="text-3xl font-bold uppercase mt-1">
-            Pengaduan Online
-          </h2>
-        </div>
-        <div className="max-w-3xl mx-auto px-4 mt-10 relative z-20">
+
+        <div className="max-w-3xl mx-auto px-4 py-10 relative z-20">
           <div className="bg-[#0c2415] rounded-lg shadow-2xl overflow-hidden mb-16">
             <div className="bg-[#8B0000] py-4 text-center">
               <h3 className="text-white text-xl font-bold">
@@ -116,7 +119,7 @@ const LaporPage = () => {
               </h3>
             </div>
 
-            <div className="p-8 space-y-4">
+            <div className="p-5 md:p-8 space-y-4">
               <div className="relative">
                 <input
                   type="text"
@@ -173,12 +176,11 @@ const LaporPage = () => {
                 </span>
               </div>
 
-              <label className="border-2 border-dashed border-gray-500 rounded p-6 flex flex-col items-center justify-center text-gray-400 hover:border-white hover:text-white transition cursor-pointer bg-white/5">
-                <span className="text-sm mb-1">
+              <label className="border-2 border-dashed border-gray-500 rounded p-4 md:p-6 flex flex-col items-center justify-center text-gray-400 hover:border-white hover:text-white transition cursor-pointer bg-white/5 overflow-hidden">
+                <span className="text-xs md:text-sm mb-2 text-center break-words w-full px-2">
                   {file ? file.name : "Upload Lampiran (Max 10 MB)"}
                 </span>
                 <Upload size={20} />
-
                 <input
                   type="file"
                   className="hidden"
@@ -187,114 +189,104 @@ const LaporPage = () => {
                 />
               </label>
 
-              <div className="flex justify-end pt-2">
+              <div className="flex justify-center md:justify-end pt-2">
                 <button
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className="bg-[#8B0000] hover:bg-[#a50000] text-white font-bold py-2 px-8 rounded shadow-lg transition-colors disabled:opacity-50"
+                  className="w-full md:w-auto bg-[#8B0000] hover:bg-[#a50000] text-white font-bold py-3 px-10 rounded shadow-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isLoading ? "Mengirim..." : "Lapor!"}
+                  {!isLoading && <Send size={18} />}
                 </button>
               </div>
             </div>
           </div>
 
           <div className="space-y-6">
+            <h4 className="text-slate-900 font-black text-xl uppercase tracking-tight flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-[#8B0000]"></span>
+              Laporan Terkini
+            </h4>
+
             {reports.map((item, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl shadow-md border border-[#0a210f]/20 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300"
               >
-                <div className="bg-[#0a210f] px-6 py-4 flex justify-between items-start md:items-center flex-col md:flex-row gap-2">
-                  <div className="flex items-center gap-3">
+                <div className="bg-[#0a210f] px-5 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span
-                      className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border ${
+                      className={`text-[9px] font-black px-2.5 py-1 rounded uppercase tracking-wider border ${
                         item.status === "SELESAI"
-                          ? "bg-green-500/20 text-green-300 border-green-500/30"
+                          ? "bg-green-500/20 text-green-400 border-green-500/30"
                           : item.status === "PROSES"
-                          ? "bg-blue-500/20 text-blue-300 border-blue-500/30"
+                          ? "bg-blue-500/20 text-blue-400 border-blue-500/30"
                           : item.status === "DITOLAK"
-                          ? "bg-red-500/20 text-red-300 border-red-500/30"
-                          : "bg-yellow-500/20 text-yellow-300 border-yellow-500/30"
+                          ? "bg-red-500/20 text-red-400 border-red-500/30"
+                          : "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
                       }`}
                     >
                       {item.status || "PENDING"}
                     </span>
-                    <span className="font-bold text-white text-lg">
+                    <span className="font-bold text-white text-base md:text-lg truncate max-w-[200px] sm:max-w-none">
                       {item.judulPengaduan || "Tanpa Judul"}
                     </span>
                   </div>
-
-                  {/* Tanggal warna abu terang */}
-                  <div className="flex items-center text-gray-300 text-xs font-medium">
-                    <Calendar size={14} className="mr-1.5 opacity-70" />
-                    {item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "Tanggal tidak tersedia"}
+                  <div className="flex items-center text-gray-400 text-[10px] font-bold uppercase tracking-tighter shrink-0">
+                    <Calendar size={14} className="mr-1.5 opacity-60" />
+                    {new Date(item.createdAt).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
                   </div>
                 </div>
 
-                <div className="p-6">
-                  <div className="flex flex-col md:flex-row gap-6">
-                    <div className="flex-1">
-                      <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                        {item.isiPengaduan}
-                      </p>
-
-                      <div className="mt-4 flex items-center gap-4 pt-4 border-t border-gray-100">
-                        <div className="flex items-center text-[#0a210f] text-xs font-medium">
-                          <User size={14} className="mr-1.5" />
-                          <span>{item.namaPengadu || "Anonim"}</span>
-                        </div>
-                        <div className="flex items-center text-[#0a210f] text-xs font-medium">
-                          <Clock size={14} className="mr-1.5" />
-                          <span>
-                            {item.createdAt
-                              ? new Date(item.createdAt).toLocaleTimeString(
-                                  "id-ID",
-                                  {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  }
-                                ) + " WIB"
-                              : "-"}
-                          </span>
-                        </div>
+                <div className="p-5 md:p-6 flex flex-col md:flex-row gap-6">
+                  <div className="flex-1">
+                    <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+                      {item.isiPengaduan}
+                    </p>
+                    <div className="mt-6 flex flex-wrap items-center gap-4 pt-4 border-t border-gray-50 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                      <div className="flex items-center">
+                        <User size={14} className="mr-1.5 text-[#8B0000]" />
+                        {item.namaPengadu || "Anonim"}
+                      </div>
+                      <div className="flex items-center border-l border-gray-200 pl-4">
+                        <Clock size={14} className="mr-1.5 text-[#8B0000]" />
+                        {new Date(item.createdAt).toLocaleTimeString("id-ID", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}{" "}
+                        WIB
                       </div>
                     </div>
-
-                    {/* Gambar */}
-                    {item.buktiFotoUrl && (
-                      <div className="w-full md:w-48 h-32 flex-shrink-0">
-                        <img
-                          src={item.buktiFotoUrl}
-                          alt="Bukti Laporan"
-                          className="w-full h-full object-cover rounded-lg border border-gray-200 cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() =>
-                            window.open(item.buktiFotoUrl, "_blank")
-                          }
-                        />
-                      </div>
-                    )}
                   </div>
+                  {item.buktiFotoUrl && (
+                    <div className="w-full md:w-40 h-48 md:h-32 flex-shrink-0">
+                      <img
+                        src={item.buktiFotoUrl}
+                        alt="Bukti"
+                        className="w-full h-full object-cover rounded-lg border border-gray-100 cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
+                        onClick={() => window.open(item.buktiFotoUrl, "_blank")}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
 
             {reports.length === 0 && (
-              <div className="text-center py-10 bg-gray-50 rounded-lg border-2 border-dashed border-[#0a210f]/30">
-                <p className="text-[#0a210f] font-medium">
-                  Belum ada laporan yang masuk.
+              <div className="text-center py-16 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">
+                  Belum ada laporan masuk
                 </p>
               </div>
             )}
           </div>
         </div>
       </div>
+      <Chatbot />
       <Footer />
     </>
   );
