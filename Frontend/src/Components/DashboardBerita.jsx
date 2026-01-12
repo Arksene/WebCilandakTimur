@@ -64,7 +64,7 @@ const DashboardBerita = () => {
     formData.append("judul", formDataInput.judul);
     formData.append("isi", formDataInput.isi);
     formData.append("kategori", formDataInput.kategori);
-    formData.append("penulis", formDataInput.penulis);
+    formData.append("Penulis", formDataInput.Penulis);
 
     if (formDataInput.gambar instanceof File) {
       formData.append("gambar", formDataInput.gambar);
