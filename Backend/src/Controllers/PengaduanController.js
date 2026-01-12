@@ -61,7 +61,7 @@ export const createPengaduan = async (req, res) => {
     });
 
     if (email) {
-      await sendEmail(
+      sendEmail(
         email,
         "Laporan Pengaduan Diterima",
         `Halo ${namaPengadu}, laporan Anda "${judulPengaduan}" telah kami terima dengan status PENDING.`
@@ -230,9 +230,10 @@ Layanan Pengaduan Kelurahan Cilandak Timur
       `;
 
       try {
-        await sendEmail(existingPengaduan.email, subject, text);
+        await sendEmail("m.eka.dwi.pratama@gmail.com", subject, text);
+        console.log("Email update status terkirim ke email testing.");
       } catch (err) {
-        console.error("Gagal kirim email update status:", err.message);
+        console.error("Gagal kirim email:", err.message);
       }
     }
 
