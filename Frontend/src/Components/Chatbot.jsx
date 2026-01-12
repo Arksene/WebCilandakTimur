@@ -30,10 +30,10 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
-
+    const Base_URL = import.meta.env.VITE_API_URL;
     try {
       // Pastikan Port Backend sesuai (default: 5000)
-      const response = await fetch("http://localhost:3000/api/chat", {
+      const response = await fetch(`${BASE_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage.text }),
