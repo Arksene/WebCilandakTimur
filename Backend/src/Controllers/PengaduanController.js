@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { sendEmail } from "../lib/mailer.js";
+import { sendEmail } from "../lib/nodeMailer.js";
 import cloudinary from "../config/cloudinary.js";
 
 const prisma = new PrismaClient();
