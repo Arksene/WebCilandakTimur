@@ -16,6 +16,7 @@ import {
   FileText,
   Image as ImageIcon,
 } from "lucide-react";
+import { alertError, alertSuccess, confirmAlert } from "../lib/alerts";
 
 const DashboardPengaduan = () => {
   const [data, setData] = useState([]);
@@ -52,31 +53,47 @@ const DashboardPengaduan = () => {
   }, []);
 
   const handleUpdateStatus = async (id, newStatus) => {
-    try {
-      await axios.patch(
-        `${API_URL}/${id}/status`,
-        { status: newStatus },
-        getAuthHeader()
-      );
-      const updatedData = data.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item
-      );
-      setData(updatedData);
-      if (selectedItem?.id === id)
-        setSelectedItem({ ...selectedItem, status: newStatus });
-    } catch (error) {
-      alert("Gagal mengubah status.");
+    const isConfirmed = await confirmAlert(
+      "Update Status?",
+      `Ubah status laporan menjadi ${newStatus}?`
+    );
+
+    if (isConfirmed) {
+      try {
+        await axios.patch(
+          `${API_URL}/${id}/status`,
+          { status: newStatus },
+          getAuthHeader()
+        );
+        const updatedData = data.map((item) =>
+          item.id === id ? { ...item, status: newStatus } : item
+        );
+        setData(updatedData);
+        if (selectedItem?.id === id)
+          setSelectedItem({ ...selectedItem, status: newStatus });
+
+        alertSuccess(`Status berhasil diperbarui ke ${newStatus}`);
+      } catch (error) {
+        alertError("Gagal mengubah status.");
+      }
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Hapus laporan ini permanen?")) return;
-    try {
-      await axios.delete(`${API_URL}/${id}`, getAuthHeader());
-      fetchPengaduan();
-      setSelectedItem(null);
-    } catch (error) {
-      alert("Gagal menghapus laporan.");
+    const isConfirmed = await confirmAlert(
+      "Hapus Laporan?",
+      "Tindakan ini permanen dan tidak dapat dibatalkan!"
+    );
+
+    if (isConfirmed) {
+      try {
+        await axios.delete(`${API_URL}/${id}`, getAuthHeader());
+        fetchPengaduan();
+        setSelectedItem(null);
+        alertSuccess("Laporan berhasil dihapus");
+      } catch (error) {
+        alertError("Gagal menghapus laporan.");
+      }
     }
   };
 

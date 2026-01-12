@@ -11,6 +11,7 @@ import {
   School,
   Info,
 } from "lucide-react";
+import { alertError, alertSuccess } from "../lib/alerts";
 
 const DashboardInformasiKelurahan = ({ defaultTab = "profil" }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
@@ -52,10 +53,10 @@ const DashboardInformasiKelurahan = ({ defaultTab = "profil" }) => {
   const handleUpdateItem = async (url, id, payload, message) => {
     try {
       await axios.put(url + `/${id}`, payload, getAuthHeader());
-      alert(message || "Data berhasil diperbarui!");
+      alertSuccess(message || "Data berhasil diperbarui!");
       fetchAllData();
     } catch (error) {
-      alert("Gagal menyimpan perubahan.");
+      alertError("Gagal menyimpan perubahan.");
     }
   };
 

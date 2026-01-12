@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import FormDokumen from "./FormDokumen";
+import { alertSuccess, alertError, confirmAlert } from "../lib/alerts";
 
 const DashboardDokumen = () => {
   const [data, setData] = useState([]);
@@ -42,14 +43,20 @@ const DashboardDokumen = () => {
   useEffect(() => {
     fetchDokumen();
   }, []);
-
   const handleDelete = async (id) => {
-    if (!confirm("Yakin ingin menghapus dokumen ini?")) return;
-    try {
-      await axios.delete(`${API_URL}/${id}`, getAuthHeader());
-      fetchDokumen();
-    } catch (error) {
-      alert("Gagal menghapus dokumen");
+    const isConfirmed = await confirmAlert(
+      "Apakah Anda yakin?",
+      "Berita yang dihapus tidak dapat dikembalikan!"
+    );
+
+    if (isConfirmed) {
+      try {
+        await axios.delete(`${API_URL}/${id}`, getAuthHeader());
+        fetchBerita();
+        alertSuccess("Berita Berhasil Dihapus");
+      } catch (error) {
+        alertError("Gagal menghapus berita.");
+      }
     }
   };
 
@@ -78,9 +85,10 @@ const DashboardDokumen = () => {
 
       setShowForm(false);
       setEditingItem(null);
+      alertSuccess("Berhasil Mengupload Dokumen");
       fetchDokumen();
     } catch (error) {
-      alert("Gagal menyimpan data.");
+      alertError("Gagal menyimpan data.");
     }
   };
 

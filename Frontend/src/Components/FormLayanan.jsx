@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Save, Plus, Trash2, X } from "lucide-react";
+import { useState } from "react";
+import { Save, Plus, Trash2, X, ListChecks, Hash, Layers } from "lucide-react";
+import { alertError } from "../lib/alerts";
 
 const FormLayanan = ({ onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
     namaLayanan: initialData?.namaLayanan || "",
     kategoriLayanan: initialData?.kategoriLayanan || "Administrasi",
     nomor: initialData?.nomor || 1,
-    // Jika edit, pakai syarat lama. Jika baru, siapkan satu array kosong
     syarat:
       initialData?.syarat && initialData.syarat.length > 0
         ? initialData.syarat
@@ -17,7 +17,6 @@ const FormLayanan = ({ onClose, onSubmit, initialData }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // --- LOGIKA DINAMIS ARRAY SYARAT ---
   const handleSyaratChange = (index, value) => {
     const newSyarat = [...formData.syarat];
     newSyarat[index] = value;
@@ -29,115 +28,139 @@ const FormLayanan = ({ onClose, onSubmit, initialData }) => {
   };
 
   const removeSyaratField = (index) => {
+    if (formData.syarat.length <= 1) {
+      setFormData({ ...formData, syarat: [""] });
+      return;
+    }
     const newSyarat = formData.syarat.filter((_, i) => i !== index);
     setFormData({ ...formData, syarat: newSyarat });
   };
-  // -----------------------------------
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // FORMAT DATA SEBELUM KIRIM
+    const finalSyarat = formData.syarat.filter((s) => s.trim() !== "");
+
+    if (finalSyarat.length === 0) {
+      alertError("Minimal harus ada satu persyaratan yang diisi!");
+      return;
+    }
+
     const cleanData = {
       ...formData,
-      nomor: parseInt(formData.nomor), // Pastikan Integer sesuai Schema Prisma
-      // Hapus input syarat yang kosong agar tidak nyampah di DB
-      syarat: formData.syarat.filter((s) => s.trim() !== ""),
+      nomor: parseInt(formData.nomor),
+      syarat: finalSyarat,
     };
 
-    console.log("Mengirim Data Layanan:", cleanData);
     onSubmit(cleanData);
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 relative">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">
-          {initialData ? "Edit Layanan" : "Tambah Layanan"}
+    <div className="bg-white rounded-3xl overflow-hidden max-w-2xl w-full mx-auto shadow-2xl border border-slate-100">
+      <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+        <h2 className="text-xl font-black text-slate-800 tracking-tight">
+          {initialData ? "Edit Layanan Publik" : "Tambah Layanan Baru"}
         </h2>
-        <button onClick={onClose}>
-          <X className="text-gray-500 hover:text-red-500" />
+        <button
+          onClick={onClose}
+          className="p-2 hover:bg-rose-50 hover:text-rose-500 text-slate-400 rounded-full transition-all"
+        >
+          <X size={20} />
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="col-span-2">
-            <label className="block text-sm font-semibold mb-1">
-              Nama Layanan
+      <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="md:col-span-2 space-y-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-1">
+              <ListChecks size={12} /> Nama Layanan
             </label>
             <input
               required
               name="namaLayanan"
               value={formData.namaLayanan}
               onChange={handleChange}
-              className="w-full border p-2 rounded focus:ring-2 focus:ring-indigo-500 outline-none"
-              placeholder="Contoh: Pembuatan KTP"
+              placeholder="Contoh: Surat Pengantar Nikah"
+              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-slate-700 font-medium"
             />
           </div>
-          <div>
-            <label className="block text-sm font-semibold mb-1">No. Urut</label>
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-1">
+              <Hash size={12} /> No. Urut
+            </label>
             <input
               name="nomor"
               type="number"
               value={formData.nomor}
               onChange={handleChange}
-              className="w-full border p-2 rounded focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full bg-slate-50 border border-slate-200 p-3 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-slate-700 font-medium"
             />
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold mb-1">Kategori</label>
+        <div className="space-y-1">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 flex items-center gap-1">
+            <Layers size={12} /> Kategori Layanan
+          </label>
           <input
             required
             name="kategoriLayanan"
             value={formData.kategoriLayanan}
             onChange={handleChange}
-            className="w-full border p-2 rounded focus:ring-2 focus:ring-indigo-500 outline-none"
-            placeholder="Contoh: Kependudukan"
+            placeholder="Contoh: Kependudukan / PTSP"
+            className="w-full bg-slate-50 border border-slate-200 p-3 rounded-2xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-slate-700 font-medium"
           />
         </div>
 
-        {/* Dynamic Input Syarat */}
-        <div>
-          <label className="block text-sm font-semibold mb-1">
-            Persyaratan Dokumen
+        <div className="space-y-3">
+          <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1 block">
+            Persyaratan Dokumen <span className="text-rose-500">*</span>
           </label>
-          {formData.syarat.map((item, index) => (
-            <div key={index} className="flex gap-2 mb-2">
-              <input
-                type="text"
-                value={item}
-                onChange={(e) => handleSyaratChange(index, e.target.value)}
-                placeholder={`Syarat ke-${index + 1}`}
-                className="w-full border p-2 rounded bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-              {/* Tombol hapus hanya muncul jika ada lebih dari 1 syarat */}
-              <button
-                type="button"
-                onClick={() => removeSyaratField(index)}
-                className="text-red-500 p-2 hover:bg-red-50 rounded"
+
+          <div className="space-y-3 max-h-[30vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200">
+            {formData.syarat.map((item, index) => (
+              <div
+                key={index}
+                className="flex gap-2 group animate-in slide-in-from-left-2 duration-200"
               >
-                <Trash2 size={18} />
-              </button>
-            </div>
-          ))}
+                <div className="flex-1 relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-300">
+                    {index + 1}
+                  </span>
+                  <input
+                    type="text"
+                    value={item}
+                    onChange={(e) => handleSyaratChange(index, e.target.value)}
+                    placeholder={`Masukkan persyaratan dokumen...`}
+                    className="w-full bg-slate-50 border border-slate-200 pl-8 pr-4 py-2.5 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-sm text-slate-600 font-medium"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeSyaratField(index)}
+                  className="p-2.5 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            ))}
+          </div>
+
           <button
             type="button"
             onClick={addSyaratField}
-            className="text-sm text-indigo-600 flex items-center gap-1 hover:underline mt-1 font-medium"
+            className="w-full py-3 border-2 border-dashed border-slate-100 rounded-2xl text-indigo-500 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-indigo-50 hover:border-indigo-200 transition-all active:scale-[0.98]"
           >
-            <Plus size={14} /> Tambah Syarat Lain
+            <Plus size={16} /> Tambah Syarat
           </button>
         </div>
 
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white p-2 rounded flex justify-center items-center gap-2 hover:bg-indigo-700 transition"
+          className="w-full bg-slate-900 hover:bg-indigo-600 text-white p-4 rounded-2xl flex justify-center items-center gap-3 font-bold shadow-xl shadow-slate-200 transition-all active:scale-[0.98] mt-4"
         >
-          <Save size={18} />{" "}
-          {initialData ? "Simpan Perubahan" : "Simpan Layanan"}
+          <Save size={20} />
+          {initialData ? "Perbarui Layanan" : "Simpan Layanan Publik"}
         </button>
       </form>
     </div>

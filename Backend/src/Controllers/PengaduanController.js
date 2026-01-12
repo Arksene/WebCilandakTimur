@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { sendEmail } from "../lib/mailer.js";
 import cloudinary from "../config/cloudinary.js";
 
 const prisma = new PrismaClient();
@@ -58,6 +59,14 @@ export const createPengaduan = async (req, res) => {
         status: "PENDING",
       },
     });
+
+    if (email) {
+      sendEmail(
+        email,
+        "Laporan Pengaduan Diterima",
+        `Halo ${namaPengadu}, laporan Anda "${judulPengaduan}" telah kami terima dengan status PENDING.`
+      );
+    }
 
     res.status(201).json({
       success: true,
@@ -195,6 +204,35 @@ export const updateStatusPengaduan = async (req, res) => {
         status: status.toUpperCase(),
       },
     });
+    if (existingPengaduan.email) {
+      const subject = `Update Status Pengaduan: ${updatedPengaduan.judulPengaduan}`;
+      const text = `
+Halo ${existingPengaduan.namaPengadu},
+
+Kami menginformasikan bahwa status pengaduan Anda dengan judul "${
+        existingPengaduan.judulPengaduan
+      }" telah diperbarui.
+
+Status Saat Ini: ${updatedPengaduan.status}
+
+Pesan: ${
+        updatedPengaduan.status === "PROSES"
+          ? "Laporan Anda sedang ditindaklanjuti oleh petugas terkait."
+          : updatedPengaduan.status === "SELESAI"
+          ? "Laporan Anda telah selesai ditangani. Terima kasih telah berpartisipasi."
+          : updatedPengaduan.status === "DITOLAK"
+          ? "Mohon maaf, laporan Anda tidak dapat kami proses karena alasan tertentu."
+          : "Laporan Anda telah masuk ke sistem kami."
+      }
+
+Terima kasih,
+Layanan Pengaduan Kelurahan Cilandak Timur
+      `;
+
+      sendEmail(existingPengaduan.email, subject, text).catch((err) =>
+        console.error("Gagal mengirim email notifikasi status:", err)
+      );
+    }
 
     res.status(200).json({
       success: true,

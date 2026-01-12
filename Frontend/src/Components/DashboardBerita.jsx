@@ -15,7 +15,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import FormBerita from "./FormBerita";
-import { alertError, alertSuccess } from "../lib/alerts";
+import { alertError, alertSuccess, confirmAlert } from "../lib/alerts";
 
 const DashboardBerita = () => {
   const [data, setData] = useState([]);
@@ -49,25 +49,33 @@ const DashboardBerita = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Hapus berita ini permanen?")) return;
-    try {
-      await axios.delete(`${API_URL}/${id}`, getAuthHeader());
-      fetchBerita();
-      alertSuccess("Berita Berhasil Dihapus");
-    } catch (error) {
-      alertError("Gagal menghapus.");
+    const isConfirmed = await confirmAlert(
+      "Apakah Anda yakin?",
+      "Berita yang dihapus tidak dapat dikembalikan!"
+    );
+
+    if (isConfirmed) {
+      try {
+        await axios.delete(`${API_URL}/${id}`, getAuthHeader());
+        fetchBerita();
+        alertSuccess("Berita Berhasil Dihapus");
+      } catch (error) {
+        alertError("Gagal menghapus berita.");
+      }
     }
   };
 
   const handleFormSubmit = async (formDataInput) => {
+    if (formData.kategori === "BERITA" && !formData.gambar) {
+      alertError(
+        "Untuk kategori Berita, Anda wajib mengunggah gambar bukti/sampul!"
+      );
+      return;
+    }
     const formData = new FormData();
     formData.append("judul", formDataInput.judul);
     formData.append("isi", formDataInput.isi);
     formData.append("kategori", formDataInput.kategori);
-
-    // SESUAIKAN DISINI:
-    // Ambil dari formDataInput.Penulis (sesuai state di FormBerita)
-    // Append dengan nama "Penulis" (sesuai instruksi error Prisma)
     formData.append("Penulis", formDataInput.Penulis);
 
     if (formDataInput.gambar instanceof File) {

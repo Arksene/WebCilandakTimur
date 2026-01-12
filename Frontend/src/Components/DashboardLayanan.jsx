@@ -12,6 +12,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import FormLayanan from "./FormLayanan";
+import { alertError, alertSuccess, confirmAlert } from "../lib/alerts";
 
 const DashboardLayanan = () => {
   const [data, setData] = useState([]);
@@ -20,8 +21,8 @@ const DashboardLayanan = () => {
   const [editingItem, setEditingItem] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
-
-  const API_URL = "http://localhost:3000/api/layanan-publik";
+  const Base_URL = import.meta.env.VITE_API_URL;
+  const API_URL = `${Base_URL}/api/layanan-publik`;
 
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
@@ -48,13 +49,19 @@ const DashboardLayanan = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!confirm("Yakin ingin menghapus layanan ini?")) return;
-    try {
-      await axios.delete(`${API_URL}/${id}`, getAuthHeader());
-      alert("Layanan berhasil dihapus");
-      fetchLayanan();
-    } catch (error) {
-      alert("Gagal menghapus layanan");
+    const isConfirmed = await confirmAlert(
+      "Hapus Layanan?",
+      "Data layanan yang dihapus tidak dapat dikembalikan."
+    );
+
+    if (isConfirmed) {
+      try {
+        await axios.delete(`${API_URL}/${id}`, getAuthHeader());
+        alertSuccess("Layanan berhasil dihapus");
+        fetchLayanan();
+      } catch (error) {
+        alertError("Gagal menghapus layanan");
+      }
     }
   };
 
@@ -66,18 +73,17 @@ const DashboardLayanan = () => {
           jsonData,
           getAuthHeader()
         );
-        alert("Layanan berhasil diperbarui!");
+        alertSuccess("Layanan berhasil diperbarui!");
       } else {
         await axios.post(API_URL, jsonData, getAuthHeader());
-        alert("Layanan baru berhasil ditambahkan!");
+        alertSuccess("Layanan baru berhasil ditambahkan!");
       }
       setShowForm(false);
       setEditingItem(null);
       fetchLayanan();
     } catch (error) {
-      alert(
-        `Gagal menyimpan: ${error.response?.data?.message || error.message}`
-      );
+      const errorMsg = error.response?.data?.message || error.message;
+      alertError(`Gagal menyimpan: ${errorMsg}`);
     }
   };
 
