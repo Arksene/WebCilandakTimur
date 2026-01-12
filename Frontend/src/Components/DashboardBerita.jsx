@@ -15,6 +15,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import FormBerita from "./FormBerita";
+import { alertError, alertSuccess } from "../lib/alerts";
 
 const DashboardBerita = () => {
   const [data, setData] = useState([]);
@@ -52,8 +53,9 @@ const DashboardBerita = () => {
     try {
       await axios.delete(`${API_URL}/${id}`, getAuthHeader());
       fetchBerita();
+      alertSuccess("Berita Berhasil Dihapus");
     } catch (error) {
-      alert("Gagal menghapus.");
+      alertError("Gagal menghapus.");
     }
   };
 
@@ -84,9 +86,10 @@ const DashboardBerita = () => {
 
       setShowForm(false);
       setEditingItem(null);
+      alertSuccess("Berhasil Membuat Berita");
       fetchBerita();
     } catch (error) {
-      alert("Gagal menyimpan data.");
+      alertError("Gagal menyimpan data.");
     }
   };
 

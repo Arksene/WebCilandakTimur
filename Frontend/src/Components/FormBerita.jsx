@@ -1,15 +1,13 @@
-// components/forms/FormBerita.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Save, Image, X } from "lucide-react";
 
 const FormBerita = ({ onClose, onSubmit, initialData }) => {
-  // 1. Inisialisasi State dengan data lama (jika ada) atau kosong
   const [formData, setFormData] = useState({
     judul: initialData?.judul || "",
     isi: initialData?.isi || "",
     kategori: initialData?.kategori || "BERITA",
-    penulis: initialData?.penulis || "Kelurahan Cilandak Timur",
-    gambar: initialData?.gambar || null, // Bisa berupa File object (baru) atau String URL (lama)
+    Penulis: initialData?.Penulis || "Kelurahan Cilandak Timur",
+    gambar: initialData?.gambar || null,
   });
 
   const [preview, setPreview] = useState(
@@ -31,7 +29,6 @@ const FormBerita = ({ onClose, onSubmit, initialData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Kirim data balik ke parent (Dashboard)
     onSubmit(formData);
   };
 
@@ -76,19 +73,17 @@ const FormBerita = ({ onClose, onSubmit, initialData }) => {
           <div>
             <label className="block text-sm font-semibold mb-1">Penulis</label>
             <input
-              name="penulis"
-              value={formData.penulis}
+              name="Penulis"
+              value={formData.Penulis}
               onChange={handleChange}
               className="w-full border p-2 rounded bg-white"
             />
           </div>
         </div>
 
-        {/* Upload Gambar */}
         <div>
           <label className="block text-sm font-semibold mb-1">Gambar</label>
           <div className="border-2 border-dashed border-gray-300 p-4 rounded text-center relative hover:bg-gray-50">
-            {/* Jika Edit dan ada gambar lama, tetap bisa ganti gambar baru */}
             <input
               type="file"
               accept="image/*"
