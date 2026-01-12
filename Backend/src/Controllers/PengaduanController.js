@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { sendEmail } from "../lib/nodeMailer.js";
+import { sendEmail } from "../lib/emailService.js";
 import cloudinary from "../config/cloudinary.js";
 
 const prisma = new PrismaClient();
@@ -229,9 +229,11 @@ Terima kasih,
 Layanan Pengaduan Kelurahan Cilandak Timur
       `;
 
-      await sendEmail(existingPengaduan.email, subject, text).catch((err) =>
-        console.error("Gagal mengirim email notifikasi status:", err)
-      );
+      try {
+        await sendEmail(existingPengaduan.email, subject, text);
+      } catch (err) {
+        console.error("Gagal kirim email update status:", err.message);
+      }
     }
 
     res.status(200).json({
