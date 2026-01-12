@@ -64,6 +64,10 @@ const DashboardBerita = () => {
     formData.append("judul", formDataInput.judul);
     formData.append("isi", formDataInput.isi);
     formData.append("kategori", formDataInput.kategori);
+
+    // SESUAIKAN DISINI:
+    // Ambil dari formDataInput.Penulis (sesuai state di FormBerita)
+    // Append dengan nama "Penulis" (sesuai instruksi error Prisma)
     formData.append("Penulis", formDataInput.Penulis);
 
     if (formDataInput.gambar instanceof File) {
@@ -86,9 +90,10 @@ const DashboardBerita = () => {
 
       setShowForm(false);
       setEditingItem(null);
-      alertSuccess("Berhasil Membuat Berita");
+      alertSuccess("Berhasil Menyimpan Berita");
       fetchBerita();
     } catch (error) {
+      console.error(error);
       alertError("Gagal menyimpan data.");
     }
   };
