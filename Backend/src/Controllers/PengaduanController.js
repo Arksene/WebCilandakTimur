@@ -230,7 +230,7 @@ Layanan Pengaduan Kelurahan Cilandak Timur
       `;
 
       try {
-        await sendEmail(existingPengaduan.email}, subject, text);
+        await sendEmail(existingPengaduan.email, subject, text);
         console.log("Email update status terkirim ke email testing.");
       } catch (err) {
         console.error("Gagal kirim email:", err.message);
