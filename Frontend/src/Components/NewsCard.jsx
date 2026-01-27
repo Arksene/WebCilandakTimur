@@ -13,24 +13,20 @@ const NewsCard = ({ title, image, date, author, id }) => {
           />
         </div>
 
-        {/* Bagian Konten */}
         <div className="p-3 flex flex-col flex-grow">
-          {/* Judul dengan Link */}
           <h3 className="text-sm font-bold text-gray-800 mb-2 line-clamp-3 hover:text-green-700 transition-colors">
-            <Link to={`/berita/${id}`}>{title}</Link>
+            <Link to={`/news/${id}`}>{title}</Link>
           </h3>
 
-          {/* Tombol Baca Selengkapnya (Baru Ditambahkan) */}
           <div className="mt-auto mb-3">
             <Link
-              to={`/berita/${id}`}
+              to={`/news/${id}`}
               className="text-xs font-semibold text-[#4ade80] flex items-center gap-1 hover:gap-2 transition-all"
             >
               Baca Selengkapnya <ArrowRight size={12} />
             </Link>
           </div>
 
-          {/* Meta Info (Author & Date) */}
           <div className="flex items-center justify-between text-[10px] text-gray-500 border-t pt-2 mt-auto">
             <div className="flex items-center gap-1">
               <User size={12} />
