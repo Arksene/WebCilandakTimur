@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import AboutPage from "./Pages/AboutPage";
 import NewsPage from "./Pages/NewsPage";
+import DetailBeritaPage from "./Pages/DetailBeritaPage";
 import LayananFasilitasPage from "./Pages/ServiceAndFacilitiesPage";
 import LaporPage from "./Pages/ReportPage";
 import LayananDetailPage from "./Pages/LayananDetailPage";
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/news" element={<NewsPage />} />
+        <Route path="/news/:id" element={<DetailBeritaPage />} />
         <Route path="/services" element={<LayananFasilitasPage />} />
         <Route path="/layanan/:kategori" element={<LayananDetailPage />} />
         <Route path="/layanan/dokumen_publik" element={<DokumenPublikPage />} />
