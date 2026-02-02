@@ -120,7 +120,7 @@ const LoginPage = () => {
 
           <div className="mt-10 pt-8 border-t border-slate-50 text-center">
             <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
-              Sistem Informasi Kelurahan © 2024
+              Sistem Informasi Kelurahan © 2026
             </p>
           </div>
         </div>
